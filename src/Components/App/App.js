@@ -1,11 +1,13 @@
 // import './App.css';
 import React from 'react';
 import FormComponent from '../FormComponent/FormComponent'
+import NotificationComponent, { notify } from '../Notification/Notification'
 import AppBarComponent from '../AppBar/AppBar'
-import { Container, Button, Paper, createMuiTheme, CssBaseline, Box } from '@material-ui/core'
+import { Container, Button, createMuiTheme, CssBaseline, Box } from '@material-ui/core'
 import { ThemeProvider } from "@material-ui/styles";
 const { hasCookie } = require('../../Utililty/CookieManager')
 const { messageHandler } = require('../../Utililty/MessageHandler')
+
 var client = new WebSocket('ws://127.0.0.1:1337/ws')  
 const theme = createMuiTheme({
   palette: {
@@ -41,12 +43,15 @@ class App extends React.Component{
     let messageData = JSON.parse(message.data) 
     console.log(messageData)
     if (messageData['messageType'] === 'welcome') {
-      console.log("I swear i am in")
       messageHandler(messageData, this.stateUpdateMount)
-    } 
+    } else if (messageData['messageType'] === 'user-joined'){
+      messageHandler(messageData, notify)
+    } else if (messageData['messageType'] === 'updater') {
+      messageHandler(messageData, notify)
+    }
   }
   closeSocket = (event) => {
-    console.log("You are disconnected")
+    console.log("You are discssconnected")
     this.setState({disconnected: true})
     setTimeout(()=>{
       console.log("Retrying connection")
@@ -91,6 +96,7 @@ class App extends React.Component{
         <div className="App">
           <Box>
             <AppBarComponent />
+            <NotificationComponent />
           </Box>
           <Container style={{marginTop:"50px", textAlign:'center'}}>
             {customWelcome()}
