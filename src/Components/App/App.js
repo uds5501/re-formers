@@ -2,6 +2,7 @@
 import React from 'react';
 import FormComponent from '../FormComponent/FormComponent'
 import NotificationComponent, { notify } from '../Notification/Notification'
+import LogoCircle, { populateList } from '../LogoCircle/LogoCircle'
 import AppBarComponent from '../AppBar/AppBar'
 import { Container, Button, createMuiTheme, CssBaseline, Box } from '@material-ui/core'
 import { ThemeProvider } from "@material-ui/styles";
@@ -42,12 +43,12 @@ class App extends React.Component{
   incomingMessageListener = (message) => {
     let messageData = JSON.parse(message.data) 
     console.log(messageData)
-    if (messageData['messageType'] === 'welcome') {
+    if (messageData['MessageType'] === 'welcome') {
       messageHandler(messageData, this.stateUpdateMount)
-    } else if (messageData['messageType'] === 'user-joined'){
+    } else if (messageData['MessageType'] === 'user-joined'){
       messageHandler(messageData, notify)
-    } else if (messageData['messageType'] === 'updater') {
-      messageHandler(messageData, notify)
+    } else if (messageData['MessageType'] === 'updater') {
+      messageHandler(messageData, populateList)
     }
   }
   closeSocket = (event) => {
@@ -97,6 +98,14 @@ class App extends React.Component{
           <Box>
             <AppBarComponent />
             <NotificationComponent />
+            <Container>
+              <div style={{ justifyContent:'center', display:'flex'}}>
+                <h3>Currently in room</h3>
+              </div>
+              <div style={{ justifyContent:'center', display:'flex'}}>
+                <LogoCircle/>
+              </div>
+            </Container>
           </Box>
           <Container style={{marginTop:"50px", textAlign:'center'}}>
             {customWelcome()}

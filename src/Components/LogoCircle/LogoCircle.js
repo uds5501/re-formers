@@ -1,67 +1,53 @@
 import React from 'react';
 import ee from 'event-emitter'
-import Avatar from '@material-ui/core/Avatar'
+import { Avatar, Typography, Box, Grid} from '@material-ui/core'
 
-class NotificationComponent extends React.Component {
+const emitter = new ee();
+
+export const populateList = (list) => {
+  emitter.emit('update', list)
+}
+
+class LogoCircle extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false,
+      loading: true,
       list: []
     }
     emitter.on('update', (list) => {
-      this.updateList(list)
+      this.showList(list)
     })
   }
-
-  updateList = (name, color) => {
-    if(this.timeout) {
-      clearTimeout(this.timeout)
-      this.setState({
-        open: false,
-        name: '',
-        color: '',
-      }, () => {
-        this.timeout = setTimeout(() => {
-          this.showNotif(name, color);
-        }, 500)
-      })
-    } else {
-      this.showNotif(name, color)
-    }
-  }
-  showNotif = (name, color) => {
+  showList = (list) => {
     this.setState({
-      open: true,
-      name: name,
-      color: color
-    }, () => {
-      this.timeout = setTimeout(() => {
-        this.setState({
-          open: false,
-          name: '',
-          color: ''
-        });
-      }, 3000)
+      loading: false,
+      list: list
     });
   }
   render() {
-    const titleMessage = () => {
-      return <Typography variant="h5"> {this.state.name} has joined the chat 🥳</Typography>
-    }
-    const handleClose = (event, reason) => {
-      if (reason === 'clickaway') {
-        return;
+    const logoCraft = this.state.list.map((item) => 
+      <Avatar style={{backgroundColor:item.colour, marginLeft: '5px'}} alt={item.userName}>
+        {item.userName.substring(0,2)}
+      </Avatar>
+    )
+    const returnObj = () => {
+      if (this.state.loading) {
+        return <Typography variant="h5"> User list loading.. </Typography>
+      } else {
+        return this.state.list.length == 0 ?  <Typography variant="h5"> No user found in room </Typography> : logoCraft
       }
-      this.setState({open: false})
-      clearTimeout(this.timeout)
     }
-    
+    const inlineStyle = {
+      display: 'flex'
+    }
     return (
-      <Snackbar open={this.state.open} autoHideDuration={1000} onClose={handleClose}>
-        {titleMessage()}
-      </Snackbar>
+      <React.Fragment>
+        <div style={inlineStyle}>
+          {returnObj()}
+        </div>
+      </React.Fragment>
     )
   }
 }
-export default NotificationComponent
+export default LogoCircle
