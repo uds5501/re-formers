@@ -1,6 +1,6 @@
 import React from 'react';
 import ee from 'event-emitter'
-import { Avatar, Typography, Box, Grid} from '@material-ui/core'
+import { Avatar, Typography } from '@material-ui/core'
 
 const emitter = new ee();
 
@@ -35,7 +35,7 @@ class LogoCircle extends React.Component {
       if (this.state.loading) {
         return <Typography variant="h5"> User list loading.. </Typography>
       } else {
-        return this.state.list.length == 0 ?  <Typography variant="h5"> No user found in room </Typography> : logoCraft
+        return this.state.list.length === 0 ?  <Typography variant="h5"> No user found in room </Typography> : logoCraft
       }
     }
     const inlineStyle = {

@@ -23,6 +23,7 @@ class App extends React.Component{
     userColor: null,
     ws: null,
     disconnected: false,
+    logout: false,
     formFields: [{
       'type': 'text',
       'question': 'are you okay?',
@@ -49,17 +50,21 @@ class App extends React.Component{
       messageHandler(messageData, notify)
     } else if (messageData['MessageType'] === 'updater') {
       messageHandler(messageData, populateList)
+    } else if (messageData['MessageType'] === 'user-logout') {
+      messageHandler(messageData, notify)
     }
   }
   closeSocket = (event) => {
-    console.log("You are discssconnected")
+    console.log("You are disconnected")
     this.setState({disconnected: true})
     setTimeout(()=>{
-      console.log("Retrying connection")
-      client = new WebSocket('ws://127.0.0.1:1337/ws')
-      client.addEventListener('open', this.openEventListener)
-      client.addEventListener('message', this.incomingMessageListener)
-      client.addEventListener('close', this.closeSocket)
+      if (!this.state.logout) {
+        console.log("Retrying connection")
+        client = new WebSocket('ws://127.0.0.1:1337/ws')
+        client.addEventListener('open', this.openEventListener)
+        client.addEventListener('message', this.incomingMessageListener)
+        client.addEventListener('close', this.closeSocket)
+      }
     }, 5000)
   }
   componentDidMount() {

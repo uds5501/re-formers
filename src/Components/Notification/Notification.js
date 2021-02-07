@@ -4,8 +4,9 @@ import ee from 'event-emitter'
 
 const emitter = new ee();
 
-export const notify = (msg) => {
-  emitter.emit('notification', msg);
+export const notify = (name, color, inout) => {
+  console.log("NOTIFY:" ,name, color, inout)
+  emitter.emit('notification', name, color, inout);
 }
 class NotificationComponent extends React.Component {
   constructor(props) {
@@ -13,48 +14,57 @@ class NotificationComponent extends React.Component {
     this.state = {
       name: '',
       color: '',
-      open: false
+      open: false,
+      inout: '',
     }
     this.timeout = null;
-    emitter.on('notification', (name, color) => {
-      this.onShow(name, color)
+    emitter.on('notification', (name, color, inout) => {
+      console.log("notification: ", name, color, inout)
+      this.onShow(name, color, inout)
     })
   }
 
-  onShow = (name, color) => {
+  onShow = (name, color, inout) => {
     if(this.timeout) {
       clearTimeout(this.timeout)
       this.setState({
         open: false,
         name: '',
         color: '',
+        inout: ''
       }, () => {
         this.timeout = setTimeout(() => {
-          this.showNotif(name, color);
+          this.showNotif(name, color, inout);
         }, 500)
       })
     } else {
-      this.showNotif(name, color)
+      this.showNotif(name, color, inout)
     }
   }
-  showNotif = (name, color) => {
+  showNotif = (name, color, inout) => {
     this.setState({
       open: true,
       name: name,
-      color: color
+      color: color,
+      inout: inout
     }, () => {
       this.timeout = setTimeout(() => {
         this.setState({
           open: false,
           name: '',
-          color: ''
+          color: '',
+          inout: ''
         });
       }, 3000)
     });
   }
   render() {
     const titleMessage = () => {
-      return <Typography variant="h5"> {this.state.name} has joined the chat 🥳</Typography>
+      if (this.state.inout === 'login') {
+        return <Typography variant="h5"> {this.state.name} has joined the chat 🥳</Typography>
+      } else if (this.state.inout === 'logout') {
+        return <Typography variant="h5"> {this.state.name} has left 👋</Typography>
+      }
     }
     const handleClose = (event, reason) => {
       if (reason === 'clickaway') {
