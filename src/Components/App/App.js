@@ -4,10 +4,10 @@ import FormComponent from '../FormComponent/FormComponent'
 import NotificationComponent, { notify } from '../Notification/Notification'
 import LogoCircle, { populateList } from '../LogoCircle/LogoCircle'
 import AppBarComponent from '../AppBar/AppBar'
-import { Container, Button, createMuiTheme, CssBaseline, Box } from '@material-ui/core'
+import { Container, Button, createMuiTheme, CssBaseline, Box, Typography } from '@material-ui/core'
 import { ThemeProvider } from "@material-ui/styles";
-const { hasCookie } = require('../../Utililty/CookieManager')
-const { messageHandler } = require('../../Utililty/MessageHandler')
+const { hasCookie, DeleteCookie } = require('../../Utililty/CookieManager')
+const { messageHandler, logoutHandler } = require('../../Utililty/MessageHandler')
 
 var client = new WebSocket('ws://127.0.0.1:1337/ws')  
 const theme = createMuiTheme({
@@ -16,8 +16,21 @@ const theme = createMuiTheme({
   }
 });
 
+class Logout extends React.Component {
+  render() {
+    return (        
+      <div className="Logout">
+        <Container style={{marginTop:"50px", textAlign:'center'}}>
+          <Typography variant="h5"> Thanks for trying out our app, hope to see you soon again 😃</Typography>
+          <Typography variant="h5"> Pssst... you can reload the page to try and reconnect!</Typography>
+        </Container>
+      </div>
+    )
+  }
+}
+
 class App extends React.Component{
-  
+ 
   state = {
     userName: null,
     userColor: null,
@@ -31,6 +44,15 @@ class App extends React.Component{
       'id': 1
     }],
     userList : [],
+  }
+  handleLogout = () => {
+    console.log("Logout triggered")
+    let obj = hasCookie()
+    logoutHandler(obj.entryToken)
+    DeleteCookie(['entryToken'])
+    this.setState({
+      logout: true
+    })
   }
   openEventListener = (event) => {
     let obj = hasCookie()
@@ -52,6 +74,8 @@ class App extends React.Component{
       messageHandler(messageData, populateList)
     } else if (messageData['MessageType'] === 'user-logout') {
       messageHandler(messageData, notify)
+    } else if (messageData['MessageType'] === 'disconnect') {
+      messageHandler(messageData, this.handleLogout)
     }
   }
   closeSocket = (event) => {
@@ -78,7 +102,8 @@ class App extends React.Component{
   stateUpdateMount = (userName, colour) => {
     this.setState({
       userName: userName,
-      userColor: colour
+      userColor: colour,
+      logout: false
     })
   }
 
@@ -96,13 +121,16 @@ class App extends React.Component{
         return <h1>We are trying to log you in, the room must be full, hang tight 😅, okay?</h1>
       }
     }
-    return (
+    return ( 
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <div className="App">
           <Box>
-            <AppBarComponent />
+            <AppBarComponent logout={!this.state.logout} handleLogout={this.handleLogout}/>
+            {this.state.logout && <Logout />}
+          
             <NotificationComponent />
+            {!this.state.logout && 
             <Container>
               <div style={{ justifyContent:'center', display:'flex'}}>
                 <h3>Currently in room</h3>
@@ -111,16 +139,19 @@ class App extends React.Component{
                 <LogoCircle/>
               </div>
             </Container>
+            }
           </Box>
+          {!this.state.logout && 
           <Container style={{marginTop:"50px", textAlign:'center'}}>
             {customWelcome()}
-            <Button variant="contained">
-              Add new 
-            </Button>
-            <Container style={{marginTop:"20px"}}>
-              {items}
-            </Container>
+              <Button variant="contained">
+                Add new 
+              </Button>
+              <Container style={{marginTop:"20px"}}>
+                {items}
+              </Container>
           </Container>
+          }
         </div>
       </ThemeProvider>
     )

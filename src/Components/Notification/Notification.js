@@ -19,7 +19,6 @@ class NotificationComponent extends React.Component {
     }
     this.timeout = null;
     emitter.on('notification', (name, color, inout) => {
-      console.log("notification: ", name, color, inout)
       this.onShow(name, color, inout)
     })
   }
