@@ -1,6 +1,7 @@
 // import './App.css';
 import React from 'react';
 import FormComponent from '../FormComponent/FormComponent'
+import NewElementForm from '../NewElementForm/NewElementForm'
 import NotificationComponent, { notify } from '../Notification/Notification'
 import LogoCircle, { populateList } from '../LogoCircle/LogoCircle'
 import AppBarComponent from '../AppBar/AppBar'
@@ -37,13 +38,9 @@ class App extends React.Component{
     ws: null,
     disconnected: false,
     logout: false,
-    formFields: [{
-      'type': 'text',
-      'question': 'are you okay?',
-      'by': 'uddeshya singh',
-      'id': 1
-    }],
+    formFields: [],
     userList : [],
+    newOpen: false,
   }
   handleLogout = () => {
     console.log("Logout triggered")
@@ -52,6 +49,22 @@ class App extends React.Component{
     DeleteCookie(['entryToken'])
     this.setState({
       logout: true
+    })
+  }
+  handleNewDialogClose = () => {
+    this.setState({
+      newOpen: false
+    })
+  }
+  handleNewDialogOpen = () => {
+    this.setState({
+      newOpen: true
+    })
+  }
+  handleFormHistory = (formData) => {
+    console.log("To update the forms: ", formData)
+    this.setState({
+      formFields: formData
     })
   }
   openEventListener = (event) => {
@@ -76,6 +89,8 @@ class App extends React.Component{
       messageHandler(messageData, notify)
     } else if (messageData['MessageType'] === 'disconnect') {
       messageHandler(messageData, this.handleLogout)
+    } else if (messageData['MessageType'] === 'formUpdater') {
+      messageHandler(messageData, this.handleFormHistory)
     }
   }
   closeSocket = (event) => {
@@ -144,9 +159,16 @@ class App extends React.Component{
           {!this.state.logout && 
           <Container style={{marginTop:"50px", textAlign:'center'}}>
             {customWelcome()}
-              <Button variant="contained">
+              <Button variant="contained" onClick={this.handleNewDialogOpen}>
                 Add new 
               </Button>
+              <NewElementForm
+                open={this.state.newOpen}
+                colour={this.state.userColor}
+                userName={this.state.userName}
+                closeDialog={this.handleNewDialogClose}
+                webSocket={this.state.ws}
+              />
               <Container style={{marginTop:"20px"}}>
                 {items}
               </Container>

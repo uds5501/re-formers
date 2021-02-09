@@ -21,6 +21,9 @@ export const messageHandler = (messageData, stateUpdate, secondaryCallback) => {
   } else if (messageData['MessageType'] === 'disconnect') {
     console.log("DISCONNECT MESSAGE IS HERE!")
     stateUpdate()
+  } else if (messageData['MessageType'] === 'formUpdater') {
+    console.log("Updating forms")
+    stateUpdate(messageData['FormData'])
   }
 }
 
