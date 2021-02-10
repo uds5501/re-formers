@@ -123,9 +123,16 @@ class App extends React.Component{
   }
 
   render() {    
-    const items = this.state.formFields.map((item) => 
-      <div key={item.id}>
-        <FormComponent itemData={item} callback={this.itemCallback} />
+    const items = this.state.formFields.map((item, i) => 
+      <div key={i}>
+        <FormComponent
+          itemData={item}
+          callback={this.itemCallback}
+          itemId={i}
+          socket={this.state.ws}
+          currName={this.state.userName}
+          currColor={this.state.userColor}
+        />
         <br></br>
       </div>
     )
