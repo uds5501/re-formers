@@ -11,20 +11,22 @@ export const messageHandler = (messageData, stateUpdate, secondaryCallback) => {
   } else if (messageData['MessageType'] === 'user-joined') {
     console.log("gonna show notif rn")
     let { userName, userColor } = messageData
-    stateUpdate(userName, userColor, 'login')
+    stateUpdate(userName, userColor, 'login', 'case1')
   } else if (messageData['MessageType'] === 'updater') {
     console.log("gonna update that top header here")
     stateUpdate(messageData['clientList'])
   } else if (messageData['MessageType'] === 'user-logout') {
     console.log("gonna show logout notif now")
     let { userName, userColor } = messageData
-    stateUpdate(userName, userColor, 'logout')
+    stateUpdate(userName, userColor, 'logout', 'case1')
   } else if (messageData['MessageType'] === 'disconnect') {
     console.log("DISCONNECT MESSAGE IS HERE!")
     stateUpdate()
   } else if (messageData['MessageType'] === 'formUpdater') {
     console.log("Updating forms")
     stateUpdate(messageData['FormData'])
+  } else if (messageData['MessageType'] === "already-deleted" || messageData['MessageType'] === "current-locked" || messageData['MessageType'] === "delete-confirmed") {
+    stateUpdate('a','b', messageData['MessageType'], 'case2')
   }
 }
 

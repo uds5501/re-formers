@@ -29,7 +29,7 @@ class EditElementDialog extends React.Component {
       messageType: 'edit',
       question: this.state.newQuestion,
       title: this.state.newTitle,
-      id: this.props.currItem.id
+      formId: this.props.currItem.id
     }))
     this.setState({
       newQuestion: '',

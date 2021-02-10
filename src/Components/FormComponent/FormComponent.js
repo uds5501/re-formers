@@ -1,7 +1,8 @@
 import React from 'react';
-import { Card, CardContent, Typography,Accordion, AccordionActions, AccordionDetails, AccordionSummary, Avatar, Divider, Button, CardActions, CircularProgress, Snackbar } from '@material-ui/core'
+import { Card, CardContent, Typography,Accordion, AccordionActions, Box, AccordionDetails, AccordionSummary, Avatar, Divider, Button, CardActions, CircularProgress, Snackbar } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import EditElementDialog from '../EditElementDialog/EditElementDialog'
+import { TrendingUpOutlined } from '@material-ui/icons';
 const { requestEditLock } = require('../../Utililty/MessageHandler')
 const { hasCookie } = require('../../Utililty/CookieManager')
 
@@ -36,6 +37,7 @@ class FormComponent extends React.Component {
     openEdit: false,
     showDecline: false,
     showError: false,
+    deleting: false,
   }
   componentDidMount() {
     if (window.innerWidth > 600) {
@@ -74,10 +76,28 @@ class FormComponent extends React.Component {
       this.setState({openEdit: true})
     }
   }
+  deleteFlow = () => {
+    let obj = hasCookie().entryToken
+    this.setState({
+      deleting: true
+    })
+    console.log("Sent command to delete")
+    this.props.socket.send(JSON.stringify({
+      entryToken: obj,
+      messageType: 'delete element',
+      formId: this.props.itemData.id
+    }))
+    this.setState({
+      deleting: false
+    })
+  
+  }
   render() {
     const userColorParsed = (this.props.itemData.Versions && this.props.itemData.Versions[0].EditedBy.colour) || 'black'
     const userNameParsed = (this.props.itemData.Versions && this.props.itemData.Versions[0].EditedBy.userName) || 'Jane Doe'
-    const createdAt = new Date(this.props.itemData.CreatedAt).toDateString()
+    const createdAt = new Date(this.props.itemData.CreatedAt).toLocaleDateString()
+    const isStatic = (this.props.itemData.id === -99)
+    const disableButton = this.state.loading || this.state.openEdit || this.state.showError || this.state.deleting || isStatic || this.props.itemData.IsDeleted
     return (
       <div>
         <EditElementDialog 
@@ -104,13 +124,13 @@ class FormComponent extends React.Component {
           {this.state.showError && <Typography>You cannot edit this element right now</Typography>}
           <Divider />
           <CardActions style={{justifyContent:'center'}}>
-            <Button size="small" onClick={this.editFlow} disabled={this.state.loading}> 
+            <Button size="small" onClick={this.editFlow} disabled={disableButton}> 
               Edit {this.state.loading && <CircularProgress size={24} style={styledTheme.buttonProgress}/> } 
             </Button>
-            <Button size="small" color="secondary" disabled={this.state.loading}> Delete </Button>
+            <Button size="small" color="secondary" onClick={this.deleteFlow} disabled={disableButton}> Delete </Button>
           </CardActions>
         </Card>}
-        {!this.state.small && <div style={styledTheme.root}>
+        {!this.state.small && <Box style={styledTheme.root} border={this.props.itemData.IsDeleted && 2} borderColor={this.props.itemData.IsDeleted && 'red'}>
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -140,13 +160,13 @@ class FormComponent extends React.Component {
               {this.state.showError && <Typography>You cannot edit this element right now</Typography>}
               <Divider />
               <AccordionActions>
-                <Button size="small" onClick={this.editFlow} disabled={this.state.loading || this.state.openEdit || this.state.showError}> 
+                <Button size="small" onClick={this.editFlow} disabled={disableButton}> 
                   Edit {this.state.loading && <CircularProgress size={24} style={styledTheme.buttonProgress}/> } 
                 </Button>
-                <Button size="small" color="secondary" disabled={this.state.loading || this.state.openEdit || this.state.showError}> Delete </Button>
+                <Button size="small" color="secondary" onClick={this.deleteFlow} disabled={disableButton}> Delete </Button>
               </AccordionActions>
           </Accordion>
-        </div>}
+        </Box>}
       </div>
     )
   }
