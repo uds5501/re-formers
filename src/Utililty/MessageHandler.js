@@ -1,7 +1,7 @@
 import axios from 'axios'
 const { SetCookie, DeleteCookie } = require('./CookieManager')
 // for authentication persistance
-const API_BASE = 'http://localhost:1337'
+const API_BASE = 'http://20.193.229.30:1337'
 export const messageHandler = (messageData, stateUpdate, secondaryCallback) => {
   if (messageData['MessageType'] === 'welcome') {
     DeleteCookie(['entryToken'])

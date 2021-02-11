@@ -10,7 +10,7 @@ import { ThemeProvider } from "@material-ui/styles";
 const { hasCookie, DeleteCookie } = require('../../Utililty/CookieManager')
 const { messageHandler, logoutHandler } = require('../../Utililty/MessageHandler')
 
-var client = new WebSocket('ws://127.0.0.1:1337/ws')  
+var client = new WebSocket('ws://20.193.229.30:1337/ws')  
 const theme = createMuiTheme({
   palette: {
     type: "dark"
