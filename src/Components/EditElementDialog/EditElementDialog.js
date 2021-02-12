@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dialog, TextField, DialogActions, DialogContent, DialogContentText, DialogTitle, Avatar, Button, Typography, Badge } from '@material-ui/core'
+import { Dialog, TextField, DialogActions, DialogContent, DialogContentText, DialogTitle, Avatar, Button, Typography } from '@material-ui/core'
 const { hasCookie } = require('../../Utililty/CookieManager')
 const { sendUnlockMessage } = require('../../Utililty/MessageHandler')
  

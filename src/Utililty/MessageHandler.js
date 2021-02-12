@@ -1,7 +1,7 @@
 import axios from 'axios'
 const { SetCookie, DeleteCookie } = require('./CookieManager')
 // for authentication persistance
-const API_BASE = 'http://20.193.229.30:1337'
+const API_BASE = 'https://20.193.229.30:1337'
 export const messageHandler = (messageData, stateUpdate, secondaryCallback) => {
   if (messageData['MessageType'] === 'welcome') {
     DeleteCookie(['entryToken'])
@@ -39,7 +39,7 @@ export const logoutHandler = async (token) => {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*'
   }
-  const resp = await axios.post(API_BASE+'/logout',postBody, headers )
+  await axios.post(API_BASE+'/logout',postBody, headers )
 }
 
 export const requestEditLock = async (token, formId) => {

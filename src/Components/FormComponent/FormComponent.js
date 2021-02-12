@@ -1,8 +1,7 @@
 import React from 'react';
-import { Card, CardContent, Typography,Accordion, AccordionActions, Box, AccordionDetails, AccordionSummary, Avatar, Divider, Button, CardActions, CircularProgress, Snackbar } from '@material-ui/core'
+import { Card, CardContent, Typography,Accordion, AccordionActions, Box, AccordionDetails, AccordionSummary, Avatar, Divider, Button, CardActions, CircularProgress } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import EditElementDialog from '../EditElementDialog/EditElementDialog'
-import { TrendingUpOutlined } from '@material-ui/icons';
 const { requestEditLock } = require('../../Utililty/MessageHandler')
 const { hasCookie } = require('../../Utililty/CookieManager')
 

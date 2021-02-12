@@ -22,7 +22,7 @@ class Logout extends React.Component {
     return (        
       <div className="Logout">
         <Container style={{marginTop:"50px", textAlign:'center'}}>
-          <Typography variant="h5"> Thanks for trying out our app, hope to see you soon again 😃</Typography>
+          <Typography variant="h5"> Thanks for trying out our app, hope to see you soon again <span role="img" aria-label="smile">😃</span></Typography>
           <Typography variant="h5"> Pssst... you can reload the page to try and reconnect!</Typography>
         </Container>
       </div>
@@ -162,7 +162,7 @@ class App extends React.Component{
       if (this.state.userColor && this.state.userName) {
         return <h1 style={{color:this.state.userColor}}> {this.state.userName}, Welcome to your blank form playground! 🌈</h1>
       } else {
-        return <h1>We are trying to log you in, the room must be full, hang tight 😅, okay?</h1>
+        return <h1>We are trying to log you in, the room must be full, hang tight <span role="img" aria-label="smile">😅</span>, okay?</h1>
       }
     }
     return ( 
