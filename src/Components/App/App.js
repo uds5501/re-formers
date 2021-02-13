@@ -10,7 +10,7 @@ import { ThemeProvider } from "@material-ui/styles";
 const { hasCookie, DeleteCookie } = require('../../Utililty/CookieManager')
 const { messageHandler, logoutHandler } = require('../../Utililty/MessageHandler')
 
-var client = new WebSocket('wss://20.193.229.30:1337/ws')  
+var client = new WebSocket('wss://limitless-crag-68335.herokuapp.com/ws')  
 const theme = createMuiTheme({
   palette: {
     type: "dark"
@@ -122,7 +122,7 @@ class App extends React.Component{
     setTimeout(()=>{
       if (!this.state.logout) {
         console.log("Retrying connection")
-        client = new WebSocket('wss://20.193.229.30:1337/ws')
+        client = new WebSocket('wss://limitless-crag-68335.herokuapp.com/ws')
         client.addEventListener('open', this.openEventListener)
         client.addEventListener('message', this.incomingMessageListener)
         client.addEventListener('close', this.closeSocket)

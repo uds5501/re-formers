@@ -1,7 +1,7 @@
 import axios from 'axios'
 const { SetCookie, DeleteCookie } = require('./CookieManager')
 // for authentication persistance
-const API_BASE = 'https://20.193.229.30:1337'
+const API_BASE = 'https://limitless-crag-68335.herokuapp.com'
 export const messageHandler = (messageData, stateUpdate, secondaryCallback) => {
   if (messageData['MessageType'] === 'welcome') {
     DeleteCookie(['entryToken'])
