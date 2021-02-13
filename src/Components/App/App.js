@@ -36,7 +36,7 @@ class App extends React.Component{
     userName: null,
     userColor: null,
     ws: null,
-    disconnected: false,
+    disconnected: true,
     logout: false,
     formFields: [],
     userList : [],
@@ -147,14 +147,14 @@ class App extends React.Component{
   render() {    
     const items = this.state.formFields.map((item, i) => 
       <div key={i}>
-        <FormComponent
+        {!item.IsDeleted && <FormComponent
           itemData={item}
           callback={this.itemCallback}
           itemId={i}
           socket={this.state.ws}
           currName={this.state.userName}
           currColor={this.state.userColor}
-        />
+        />}
         <br></br>
       </div>
     )
@@ -170,7 +170,7 @@ class App extends React.Component{
         <CssBaseline />
         <div className="App">
           <Box>
-            <AppBarComponent logout={!this.state.logout} handleLogout={this.handleLogout}/>
+            <AppBarComponent logout={!this.state.logout} handleLogout={this.handleLogout} isDisconnected={this.state.disconnected}/>
             {this.state.logout && <Logout />}
           
             <NotificationComponent />

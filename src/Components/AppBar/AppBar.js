@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppBar, Typography, Toolbar, Button } from '@material-ui/core'
+import { AppBar, Typography, Toolbar, Button, Badge } from '@material-ui/core'
 
 class AppBarComponent extends React.Component {
   render() {
@@ -12,7 +12,11 @@ class AppBarComponent extends React.Component {
       <div style={{flexGrow: 1}}>
         <AppBar position="static">
           <Toolbar>
-            <Typography variant="h5" style={{ flex: 1 }}>Re-Formers</Typography>
+            <div style={{ flex: 1 }}>
+              <Badge badgeContent={''} color={this.props.isDisconnected ? "error" : "primary"} >
+                <Typography variant="h5" > Re-Formers </Typography>
+              </Badge>
+            </div>
             {showLogout()}
           </Toolbar>
         </AppBar>
