@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, CardContent, Typography,Accordion, AccordionActions, Box, AccordionDetails, AccordionSummary, Avatar, Divider, Button, CardActions, CircularProgress } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import EditElementDialog from '../EditElementDialog/EditElementDialog'
+import VersionControl from '../VersionControl/VersionControl'
 const { requestEditLock } = require('../../Utililty/MessageHandler')
 const { hasCookie } = require('../../Utililty/CookieManager')
 
@@ -37,6 +38,7 @@ class FormComponent extends React.Component {
     showDecline: false,
     showError: false,
     deleting: false,
+    showVersions: false,
   }
   componentDidMount() {
     if (window.innerWidth > 600) {
@@ -74,6 +76,11 @@ class FormComponent extends React.Component {
     } else {
       this.setState({openEdit: true})
     }
+  }
+  showVersionHandler = () => {
+    this.setState({
+      showVersions: !this.state.showVersions
+    })
   }
   deleteFlow = () => {
     let obj = hasCookie().entryToken
@@ -123,6 +130,7 @@ class FormComponent extends React.Component {
           {this.state.showError && <Typography>You cannot edit this element right now</Typography>}
           <Divider />
           <CardActions style={{justifyContent:'center'}}>
+            <Button size="small" onClick={this.showVersionHandler} disabled={disableButton}> Versions </Button>    
             <Button size="small" onClick={this.editFlow} disabled={disableButton}> 
               Edit {this.state.loading && <CircularProgress size={24} style={styledTheme.buttonProgress}/> } 
             </Button>
@@ -153,12 +161,14 @@ class FormComponent extends React.Component {
                 <div style={styledTheme.title} />
                 <div style={styledTheme.question}>
                   <Typography> Element Created on {createdAt}</Typography>
+                  <Typography> Element Created by <font color={userColorParsed}>{userNameParsed}</font></Typography>
                 </div>
               </AccordionDetails>
               <Divider />
               {this.state.showError && <Typography>You cannot edit this element right now</Typography>}
               <Divider />
               <AccordionActions>
+                <Button size="small" onClick={this.showVersionHandler} disabled={disableButton}> Versions </Button>
                 <Button size="small" onClick={this.editFlow} disabled={disableButton}> 
                   Edit {this.state.loading && <CircularProgress size={24} style={styledTheme.buttonProgress}/> } 
                 </Button>
@@ -166,6 +176,7 @@ class FormComponent extends React.Component {
               </AccordionActions>
           </Accordion>
         </Box>}
+        {this.state.showVersions && <VersionControl versions={this.props.itemData.Versions}/>}
       </div>
     )
   }

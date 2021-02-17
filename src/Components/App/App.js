@@ -61,28 +61,6 @@ class App extends React.Component{
     })
   }
   handleFormHistory = (formData) => {
-    // formData.unshift({
-    //   CreatedAt: "2021-02-11T00:01:41.448423435+05:30",
-    //   IsDeleted: false,
-    //   Versions: [
-    //     {
-    //       EditedBy: {
-    //         JoinedAt: "2021-02-11T00:01:07.446153302+05:30",
-    //         colour: "DarkKhaki",
-    //         entryToken: "dWhqcnh3dnR1bTE2MTI5ODE4Njc0NDYxNDgyOTg=",
-    //         ipAddress: "127.0.0.1:33700",
-    //         userName: "JANEDOE",
-    //       },
-    //       actionPerformed: "create",
-    //       editedAt: "2021-02-11T00:01:41.448423609+05:30",
-    //       question: "Question Text",
-    //       title: "Question Title"
-    //     }
-    //   ],
-    //   id: -99,
-    //   question: "Question Text",
-    //   title: "Question Title",
-    // })
     console.log("To update the forms: ", formData)
     this.setState({
       formFields: formData

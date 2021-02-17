@@ -13,7 +13,7 @@ class AppBarComponent extends React.Component {
         <AppBar position="static">
           <Toolbar>
             <div style={{ flex: 1 }}>
-              <Badge badgeContent={''} color={this.props.isDisconnected ? "error" : "primary"} >
+              <Badge badgeContent={''} variant={'dot'} color={this.props.isDisconnected ? "error" : "primary"} >
                 <Typography variant="h5" > Re-Formers </Typography>
               </Badge>
             </div>

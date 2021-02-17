@@ -2,7 +2,7 @@ import React from 'react';
 import { Dialog, TextField, DialogActions, DialogContent, DialogContentText, DialogTitle, Avatar, Button, Typography } from '@material-ui/core'
 const { hasCookie } = require('../../Utililty/CookieManager')
 const { sendUnlockMessage } = require('../../Utililty/MessageHandler')
- 
+
 class EditElementDialog extends React.Component {
   state = {
     ws: null,
@@ -16,7 +16,6 @@ class EditElementDialog extends React.Component {
       newTitle: this.props.currItem.title,
     })
   }
-
   handleClose = () => {
     let token = hasCookie().entryToken
     sendUnlockMessage(token, this.props.currItem.id)
@@ -32,8 +31,8 @@ class EditElementDialog extends React.Component {
       formId: this.props.currItem.id
     }))
     this.setState({
-      newQuestion: '',
-      newTitle: '',
+      newQuestion: this.props.currItem.question,
+      newTitle: this.props.currItem.title,
     })
     this.props.closeDialog()
   }
