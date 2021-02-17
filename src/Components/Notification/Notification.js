@@ -65,7 +65,7 @@ class NotificationComponent extends React.Component {
     const titleMessage = () => {
       if (this.state.caseType === 'case1') {
         if (this.state.inout === 'login') {
-          return <Typography variant="h5"> {this.state.name} has joined the chat 🥳</Typography>
+          return <Typography variant="h5"> {this.state.name} has joined the room 🥳</Typography>
         } else if (this.state.inout === 'logout') {
           return <Typography variant="h5"> {this.state.name} has left 👋</Typography>
         }
